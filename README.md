@@ -25,7 +25,7 @@ A full-stack product management application built as a technical assessment usin
 
 ## Requirements
 
-- PHP 8.3+
+- PHP 8.4
 - Composer
 - Node.js 18+
 - npm
@@ -43,6 +43,10 @@ composer install
 # 3. Set up environment
 cp .env.example .env
 php artisan key:generate
+
+# Create the SQLite database file
+touch database/database.sqlite          # Mac/Linux
+type nul > database/database.sqlite     # Windows
 
 # 4. Run migrations and seed the database
 php artisan migrate --seed
