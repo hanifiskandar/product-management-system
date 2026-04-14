@@ -49,6 +49,9 @@ const props = defineProps<{
     products: PaginatedProducts;
     categories: Category[];
     filters: Filters;
+    total_products: number;
+    total_categories: number;
+    low_stock_count: number;
 }>();
 
 const confirm = useConfirm();
@@ -136,19 +139,67 @@ function confirmDelete(product: Product) {
     <div>
         <ConfirmDialog />
 
+        <!-- Page header -->
         <div class="flex items-center justify-between mb-6">
             <div>
-                <h1 class="text-2xl font-bold text-surface-900">Products</h1>
-                <p class="text-surface-500 mt-1">Manage your product inventory.</p>
+                <h1 class="text-2xl font-bold text-gray-900">Products</h1>
+                <p class="text-gray-500 mt-1">Manage your product inventory.</p>
             </div>
             <Link :href="ProductController.create.url()">
                 <Button label="Add Product" icon="pi pi-plus" />
             </Link>
         </div>
 
-        <Card>
+        <!-- Stats bar -->
+        <div class="grid grid-cols-3 gap-4 mb-6">
+            <Card class="!shadow-sm">
+                <template #content>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+                            <i class="pi pi-box text-blue-500 text-lg" />
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Total Products</p>
+                            <p class="text-2xl font-bold text-gray-900">{{ total_products }}</p>
+                        </div>
+                    </div>
+                </template>
+            </Card>
+
+            <Card class="!shadow-sm">
+                <template #content>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+                            <i class="pi pi-tag text-green-500 text-lg" />
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Total Categories</p>
+                            <p class="text-2xl font-bold text-gray-900">{{ total_categories }}</p>
+                        </div>
+                    </div>
+                </template>
+            </Card>
+
+            <Card class="!shadow-sm">
+                <template #content>
+                    <div class="flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center">
+                            <i class="pi pi-exclamation-triangle text-red-500 text-lg" />
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-500">Low Stock</p>
+                            <p class="text-2xl font-bold text-red-600">{{ low_stock_count }}</p>
+                        </div>
+                    </div>
+                </template>
+            </Card>
+        </div>
+
+        <!-- Table card -->
+        <Card class="!shadow-sm">
             <template #content>
-                <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                <!-- Filters -->
+                <div class="flex flex-col sm:flex-row gap-3 mb-3">
                     <InputText
                         v-model="search"
                         placeholder="Search products..."
@@ -163,6 +214,14 @@ function confirmDelete(product: Product) {
                         class="w-full sm:w-56"
                     />
                 </div>
+
+                <!-- Showing count -->
+                <p class="text-sm text-gray-500 mb-3">
+                    <template v-if="products.total > 0">
+                        Showing {{ products.from }}–{{ products.to }} of {{ products.total }} products
+                    </template>
+                    <template v-else>No products found</template>
+                </p>
 
                 <DataTable
                     :value="products.data"
@@ -180,10 +239,10 @@ function confirmDelete(product: Product) {
                     @sort="onSort"
                 >
                     <template #empty>
-                        <div class="text-center py-12 text-surface-400">
-                            <i class="pi pi-inbox text-4xl mb-3 block" />
-                            <p class="text-lg font-medium">No products found</p>
-                            <p class="text-sm mt-1">Try adjusting your search or filters.</p>
+                        <div class="text-center py-16 text-gray-400">
+                            <i class="pi pi-search text-4xl mb-3 block" />
+                            <p class="text-lg font-medium text-gray-600">No products found</p>
+                            <p class="text-sm mt-1">Try adjusting your search or filter.</p>
                         </div>
                     </template>
 
@@ -191,7 +250,7 @@ function confirmDelete(product: Product) {
 
                     <Column field="category.name" header="Category">
                         <template #body="{ data }">
-                            <span class="text-surface-700">{{ data.category?.name ?? '—' }}</span>
+                            <span class="text-gray-700">{{ data.category?.name ?? '—' }}</span>
                         </template>
                     </Column>
 
@@ -216,7 +275,7 @@ function confirmDelete(product: Product) {
                                 <Link :href="ProductController.edit.url(data)">
                                     <Button
                                         icon="pi pi-pencil"
-                                        severity="secondary"
+                                        severity="info"
                                         size="small"
                                         v-tooltip="'Edit'"
                                     />
