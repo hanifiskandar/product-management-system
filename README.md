@@ -5,10 +5,11 @@ A full-stack product management application built as a technical assessment usin
 ## Features
 
 - **Products** — Create, edit, delete products with name, quantity, and category
-- **Categories** — Manage product categories with inline creation
-- **Search & Filter** — Search products by name and filter by category
-- **Sortable Table** — Sort products by name or quantity
-- **Pagination** — Paginated product listing (10 per page)
+- **Categories** — Manage product categories with create, edit, and search
+- **Search & Filter** — Search products by name, filter by category; search categories by name
+- **Sortable Table** — Sort products by name, quantity, or date; default sorted by newest
+- **Pagination** — Paginated listing for both products and categories (10 per page)
+- **Stats Bar** — At-a-glance counts for total products, total categories, and low stock items
 - **Quantity Badges** — Color-coded badges: green (>10), yellow (5–10), red (<5)
 - **Soft Deletes** — Deleted records are preserved in the database but hidden from views
 - **Confirmation Dialogs** — Delete confirmation before removing products
