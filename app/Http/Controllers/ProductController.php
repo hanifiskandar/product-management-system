@@ -31,6 +31,9 @@ class ProductController extends Controller
             'products' => $products,
             'categories' => $categories,
             'filters' => $request->only(['search', 'category_id', 'sort_field', 'sort_order']),
+            'total_products' => Product::count(),
+            'total_categories' => Category::count(),
+            'low_stock_count' => Product::where('quantity', '<', 5)->count(),
         ]);
     }
 
