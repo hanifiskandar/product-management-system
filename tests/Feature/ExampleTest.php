@@ -1,7 +1,13 @@
 <?php
 
-test('returns a successful response', function () {
-    $response = $this->get(route('home'));
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
-    $response->assertOk();
+uses(RefreshDatabase::class);
+
+test('home redirects to products', function () {
+    $this->get(route('home'))->assertRedirect('/products');
+});
+
+test('products page returns a successful response', function () {
+    $this->get('/products')->assertOk();
 });
